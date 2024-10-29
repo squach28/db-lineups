@@ -140,7 +140,11 @@ const Paddlers = () => {
             <TableBody>
               {paddlers.map((paddler) => {
                 return (
-                  <TableRow key={paddler.id}>
+                  <TableRow
+                    hover
+                    sx={{ ":hover": { cursor: "pointer" } }}
+                    key={paddler.id}
+                  >
                     <TableCell>{paddler.id}</TableCell>
                     <TableCell>{paddler.fullName}</TableCell>
                     <TableCell align="center">
