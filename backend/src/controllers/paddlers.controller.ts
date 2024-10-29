@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { db } from "../utils/db";
-import { queries } from "../utils/queries";
+import { commitTransaction, queries } from "../utils/queries";
 import fs from "node:fs";
 import xlsx from "node-xlsx";
 import { v4 as uuidv4 } from "uuid";
 import { firestore } from "../utils/firebase";
+import { PaddlerInfo } from "../types/PaddlerInfo";
 
 export const getPaddlers = async (req: Request, res: Response) => {
   try {
@@ -66,6 +67,45 @@ export const addMultiplePaddlers = async (req: Request, res: Response) => {
       });
 
       res.status(200).json({ sessionId });
+      return;
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Something went wrong, try again later." });
+  }
+};
+
+export const confirmAddPaddlers = async (req: Request, res: Response) => {
+  try {
+    const sessionId = req.body.sessionId;
+    if (sessionId === undefined || sessionId === null) {
+      res.status(404).json({ message: "Missing sessionId" });
+    }
+
+    const session = firestore.collection("paddler_sessions").doc(sessionId);
+    const doc = await session.get();
+    if (doc.exists) {
+      const data = doc.data();
+      if (data) {
+        const promises = data.paddlers.map((paddler: PaddlerInfo) => {
+          return commitTransaction(queries.addPaddler, [
+            paddler.fullName,
+            paddler.gender,
+            paddler.weight,
+            paddler.sidePreference,
+            paddler.canSteer,
+            paddler.canDrum,
+          ]);
+        });
+        await Promise.all(promises);
+
+        res.status(201).json({ message: "success" });
+      } else {
+        res.status(404).json({ message: "Data does not exist" });
+        return;
+      }
+    } else {
+      res.status(404).json({ message: "Invalid session" });
       return;
     }
   } catch (e) {

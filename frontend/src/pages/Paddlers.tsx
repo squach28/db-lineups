@@ -4,7 +4,9 @@ import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { Paddler } from "../types/Paddler";
 import {
+  Alert,
   CircularProgress,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -31,7 +33,7 @@ const Paddlers = () => {
     "Drum?",
   ];
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [open, setOpen] = useState(searchParams.get("add") ? true : false);
   useEffect(() => {
     const fetchPaddlers = () => {
       return axios.get(`${import.meta.env.VITE_API_URL}/paddlers`);
@@ -101,6 +103,10 @@ const Paddlers = () => {
     }
   };
 
+  const handleSnackbarClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <header>
@@ -156,6 +162,20 @@ const Paddlers = () => {
             </TableBody>
           </Table>
         ) : null}
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        >
+          <Alert variant="filled" onClose={handleSnackbarClose}>
+            Success!
+            {searchParams.get("multiple") !== null &&
+            searchParams.get("multiple") === "true"
+              ? " Paddlers were added!"
+              : " Paddler was added!"}
+          </Alert>
+        </Snackbar>
       </main>
     </div>
   );

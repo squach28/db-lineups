@@ -2,6 +2,7 @@ import express from "express";
 import {
   addMultiplePaddlers,
   addPaddler,
+  confirmAddPaddlers,
   getPaddlerById,
   getPaddlers,
 } from "../controllers/paddlers.controller";
@@ -33,3 +34,4 @@ paddlersRouter.post(
   upload.single("paddlers"),
   addMultiplePaddlers
 );
+paddlersRouter.post("/confirm", confirmAddPaddlers);

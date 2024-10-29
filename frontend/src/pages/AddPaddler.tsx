@@ -114,7 +114,7 @@ const AddPaddler = () => {
       .post(`${import.meta.env.VITE_API_URL}/paddlers`, paddlerInfo)
       .then(() => {
         setLoading(false);
-        navigate("/paddlers?add=success", { replace: true });
+        navigate("/paddlers?add=success&multiple=false", { replace: true });
       });
   };
 

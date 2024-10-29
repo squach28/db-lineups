@@ -24,6 +24,7 @@ const ConfirmAddPaddlers = () => {
   const [paddlers, setPaddlers] = useState<Array<PaddlerInfo>>([]);
   const headings = ["Name", "Gender", "Weight", "Side", "Steer?", "Drum?"];
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     getPaddlersFromSessionId().then((paddlersFromDoc) =>
       setPaddlers(paddlersFromDoc)
@@ -44,9 +45,22 @@ const ConfirmAddPaddlers = () => {
     navigate("/paddlers/add", { replace: true });
   };
 
-  const handleConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {};
+  const handleConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (sessionId !== null) {
+      setLoading(true);
+      confirmAddPaddlersBySessionId(sessionId)
+        .then((res) => {
+          if (res.status === 201) {
+            navigate("/paddlers?add=success");
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
 
-  const confirmAddPaddlersBySessionId = (sessionId: string) => {
+  const confirmAddPaddlersBySessionId = async (sessionId: string) => {
     return axios.post(`${import.meta.env.VITE_API_URL}/paddlers/confirm`, {
       sessionId,
     });
@@ -95,11 +109,25 @@ const ConfirmAddPaddlers = () => {
             justifyContent: "end",
           }}
         >
-          <Button variant="outlined" color="error" onClick={handleCancel}>
+          <Button
+            variant="outlined"
+            color="error"
+            disabled={loading}
+            onClick={handleCancel}
+          >
             Cancel
           </Button>
-          <Button variant="contained" color="success" onClick={handleConfirm}>
-            Confirm
+          <Button
+            variant="contained"
+            color="success"
+            disabled={loading}
+            onClick={handleConfirm}
+          >
+            {loading ? (
+              <Typography>Loading...</Typography>
+            ) : (
+              <Typography>Confirm</Typography>
+            )}
           </Button>
         </Box>
       </Box>
