@@ -9,7 +9,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const FileInput = () => {
+interface FileInputProps {
+  onFileError: (message: string) => void;
+}
+
+const FileInput = (fileInputProps: FileInputProps) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
@@ -23,6 +27,9 @@ const FileInput = () => {
       uploadFile(form)
         .then(async (res) => {
           navigate(`/paddlers/add/confirm?sessionId=${res.data.sessionId}`);
+        })
+        .catch((e) => {
+          fileInputProps.onFileError(e.response.data.message);
         })
         .finally(() => {
           setLoading(false);

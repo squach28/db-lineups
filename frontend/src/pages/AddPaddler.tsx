@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
@@ -13,6 +14,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -25,6 +27,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import FileInput from "../components/FileInput";
 import InfoIcon from "@mui/icons-material/Info";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const AddPaddler = () => {
   const [paddlerInfo, setPaddlerInfo] = useState<PaddlerInfo>({
@@ -44,6 +47,7 @@ const AddPaddler = () => {
     canDrum: "",
   });
   const [loading, setLoading] = useState(false);
+  const [fileError, setFileError] = useState("");
   const navigate = useNavigate();
 
   const onFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,6 +167,14 @@ const AddPaddler = () => {
     }
   };
 
+  const onFileError = (message: string) => {
+    setFileError(message);
+  };
+
+  const handleSnackbarClose = () => {
+    setFileError("");
+  };
+
   return (
     <div>
       <header>
@@ -173,7 +185,7 @@ const AddPaddler = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            padding: { sm: 2, md: 4 },
+            padding: { xs: 2, sm: 2, md: 4 },
             gap: 2,
             maxWidth: { md: "70%", lg: "50%", xl: "30%" },
             mt: { md: 5 },
@@ -183,7 +195,7 @@ const AddPaddler = () => {
           }}
         >
           <h1 className="text-2xl">Add a Paddler</h1>
-          <FileInput />
+          <FileInput onFileError={onFileError} />
           <Container
             sx={{ display: "flex", alignItems: "center", gap: 1, px: 0 }}
           >
@@ -280,6 +292,22 @@ const AddPaddler = () => {
             {loading ? <CircularProgress /> : "Add Paddler"}
           </Button>
         </Box>
+        {fileError ? (
+          <Snackbar
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            open={fileError !== ""}
+            onClose={handleSnackbarClose}
+          >
+            <Alert
+              severity="error"
+              variant="filled"
+              color="error"
+              onClose={handleSnackbarClose}
+            >
+              {fileError}
+            </Alert>
+          </Snackbar>
+        ) : null}
       </main>
     </div>
   );
