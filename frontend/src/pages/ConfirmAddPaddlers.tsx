@@ -75,9 +75,14 @@ const ConfirmAddPaddlers = () => {
             })}
           </TableBody>
         </Table>
-        <Container
-          disableGutters
-          sx={{ mt: 5, display: "flex", gap: 2, justifyContent: "end" }}
+        <Box
+          sx={{
+            width: "100%",
+            mt: 5,
+            display: "flex",
+            gap: 2,
+            justifyContent: "end",
+          }}
         >
           <Button variant="outlined" color="error">
             Cancel
@@ -85,7 +90,7 @@ const ConfirmAddPaddlers = () => {
           <Button variant="contained" color="success">
             Confirm
           </Button>
-        </Container>
+        </Box>
       </Box>
     </div>
   );
