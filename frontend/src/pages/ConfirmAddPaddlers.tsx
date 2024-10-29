@@ -1,13 +1,12 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PaddlerInfo } from "../types/PaddlerInfo";
 import { firestore } from "../utils/firebase";
 import { getDoc, doc } from "firebase/firestore";
 import {
   Box,
   Button,
-  Container,
   Table,
   TableBody,
   TableCell,
@@ -17,13 +16,14 @@ import {
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
 
 const ConfirmAddPaddlers = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get("sessionId");
   const [paddlers, setPaddlers] = useState<Array<PaddlerInfo>>([]);
   const headings = ["Name", "Gender", "Weight", "Side", "Steer?", "Drum?"];
-
+  const navigate = useNavigate();
   useEffect(() => {
     getPaddlersFromSessionId().then((paddlersFromDoc) =>
       setPaddlers(paddlersFromDoc)
@@ -35,10 +35,21 @@ const ConfirmAddPaddlers = () => {
       const docRef = doc(firestore, "paddler_sessions", sessionId);
       const docSnap = await getDoc(docRef);
       const paddlers = docSnap.get("paddlers");
-      console.log(paddlers);
       return paddlers;
     }
     return [];
+  };
+
+  const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    navigate("/paddlers/add", { replace: true });
+  };
+
+  const handleConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {};
+
+  const confirmAddPaddlersBySessionId = (sessionId: string) => {
+    return axios.post(`${import.meta.env.VITE_API_URL}/paddlers/confirm`, {
+      sessionId,
+    });
   };
 
   return (
@@ -84,10 +95,10 @@ const ConfirmAddPaddlers = () => {
             justifyContent: "end",
           }}
         >
-          <Button variant="outlined" color="error">
+          <Button variant="outlined" color="error" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button variant="contained" color="success">
+          <Button variant="contained" color="success" onClick={handleConfirm}>
             Confirm
           </Button>
         </Box>
