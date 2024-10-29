@@ -170,7 +170,17 @@ const AddPaddler = () => {
       </header>
       <main>
         <Box
-          sx={{ display: "flex", flexDirection: "column", padding: 2, gap: 2 }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            padding: { sm: 2, md: 4 },
+            gap: 2,
+            maxWidth: { md: "70%", lg: "50%", xl: "30%" },
+            mt: { md: 5 },
+            mx: { md: "auto" },
+            borderRadius: { md: "12px" },
+            boxShadow: { md: "0 0 8px rgba(0,0,0,0.5)" },
+          }}
         >
           <h1 className="text-2xl">Add a Paddler</h1>
           <FileInput />
