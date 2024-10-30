@@ -1,6 +1,12 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 
 const Navbar = () => {
+  const authContext = useContext(AuthContext);
+
+  console.log(authContext);
   return (
     <nav className="w-full bg-gray-200 text-black text-lg p-2">
       <ul className="flex gap-4">
@@ -20,9 +26,19 @@ const Navbar = () => {
           </Link>
         </li>
         <li className="ml-auto">
-          <Link className="hover:cursor-pointer" to="/login">
-            Login
-          </Link>
+          {authContext.loading ? null : authContext.user ? (
+            <SentimentSatisfiedAltIcon
+              sx={{
+                ":hover": {
+                  cursor: "pointer",
+                },
+              }}
+            />
+          ) : (
+            <Link className="hover:cursor-pointer" to="/login">
+              Log in
+            </Link>
+          )}
         </li>
       </ul>
     </nav>

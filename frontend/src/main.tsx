@@ -10,6 +10,7 @@ import ConfirmAddPaddlers from "./pages/ConfirmAddPaddlers.tsx";
 import AddLineup from "./pages/AddLineup.tsx";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );
