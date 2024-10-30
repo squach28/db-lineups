@@ -96,7 +96,6 @@ const Signup = () => {
 
   const handleSignUp = () => {
     const isValid = validateFields(signUpInfo);
-    console.log(isValid);
     if (!isValid) {
       return;
     }
