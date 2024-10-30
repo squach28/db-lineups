@@ -16,6 +16,7 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -99,12 +100,16 @@ const Signup = () => {
     if (!isValid) {
       return;
     }
-
-    signUp().then((res) => {
-      if (res != null) {
-        navigate("/?signup=success", { replace: true });
-      }
-    });
+    setLoading(true);
+    signUp()
+      .then((res) => {
+        if (res != null) {
+          navigate("/?signup=success", { replace: true });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const signUp = async () => {
@@ -150,8 +155,12 @@ const Signup = () => {
               error={errors.confirmPassword !== ""}
               helperText={errors.confirmPassword}
             />
-            <Button variant="contained" onClick={handleSignUp}>
-              Sign up
+            <Button
+              variant="contained"
+              disabled={loading}
+              onClick={handleSignUp}
+            >
+              {loading ? "Loading..." : "Sign up"}
             </Button>
             <Box
               sx={{

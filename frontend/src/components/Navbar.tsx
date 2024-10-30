@@ -1,12 +1,19 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
+import { Button, Drawer, List, ListItem, Typography } from "@mui/material";
+import { User } from "firebase/auth";
 
 const Navbar = () => {
+  const [open, setOpen] = useState(false);
+
   const authContext = useContext(AuthContext);
 
-  console.log(authContext);
+  const toggleOpen = () => {
+    setOpen((prev) => !prev);
+  };
+
   return (
     <nav className="w-full bg-gray-200 text-black text-lg p-2">
       <ul className="flex gap-4">
@@ -28,6 +35,7 @@ const Navbar = () => {
         <li className="ml-auto">
           {authContext.loading ? null : authContext.user ? (
             <SentimentSatisfiedAltIcon
+              onClick={toggleOpen}
               sx={{
                 ":hover": {
                   cursor: "pointer",
@@ -41,7 +49,52 @@ const Navbar = () => {
           )}
         </li>
       </ul>
+      {authContext.user !== null ? (
+        <DrawerList
+          open={open}
+          toggleOpen={toggleOpen}
+          user={authContext.user}
+        />
+      ) : null}
     </nav>
+  );
+};
+
+const DrawerList = ({
+  open,
+  toggleOpen,
+  user,
+}: {
+  open: boolean;
+  toggleOpen: () => void;
+  user: User | null;
+}) => {
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+    authContext.logOut();
+    navigate("/", { replace: true });
+  };
+  return (
+    <Drawer open={open} onClose={toggleOpen} anchor="right">
+      <List>
+        <ListItem>
+          {user ? (
+            <Typography variant="subtitle1">{user.email}</Typography>
+          ) : null}
+        </ListItem>
+        <ListItem>
+          <Button
+            variant="contained"
+            color="error"
+            sx={{ ml: "auto" }}
+            onClick={handleLogOut}
+          >
+            Log out
+          </Button>
+        </ListItem>
+      </List>
+    </Drawer>
   );
 };
 
