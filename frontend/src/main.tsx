@@ -7,6 +7,7 @@ import Home from "./pages/Home.tsx";
 import Lineups from "./pages/Lineups.tsx";
 import AddPaddler from "./pages/AddPaddler.tsx";
 import ConfirmAddPaddlers from "./pages/ConfirmAddPaddlers.tsx";
+import AddLineup from "./pages/AddLineup.tsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: "/paddlers/add/confirm",
     element: <ConfirmAddPaddlers />,
+  },
+  {
+    path: "/lineups/add",
+    element: <AddLineup />,
   },
 ]);
 
