@@ -19,6 +19,11 @@ const Navbar = () => {
             Lineups
           </Link>
         </li>
+        <li className="ml-auto">
+          <Link className="hover:cursor-pointer" to="/login">
+            Login
+          </Link>
+        </li>
       </ul>
     </nav>
   );

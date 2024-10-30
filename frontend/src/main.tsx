@@ -8,6 +8,8 @@ import Lineups from "./pages/Lineups.tsx";
 import AddPaddler from "./pages/AddPaddler.tsx";
 import ConfirmAddPaddlers from "./pages/ConfirmAddPaddlers.tsx";
 import AddLineup from "./pages/AddLineup.tsx";
+import Login from "./pages/Login.tsx";
+import Signup from "./pages/Signup.tsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,14 @@ const router = createBrowserRouter([
   {
     path: "/lineups",
     element: <Lineups />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
   },
   {
     path: "/paddlers/add",

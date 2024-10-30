@@ -27,7 +27,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import FileInput from "../components/FileInput";
 import InfoIcon from "@mui/icons-material/Info";
-import ErrorIcon from "@mui/icons-material/Error";
 
 const AddPaddler = () => {
   const [paddlerInfo, setPaddlerInfo] = useState<PaddlerInfo>({
