@@ -11,6 +11,7 @@ import AddLineup from "./pages/AddLineup.tsx";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import Profile from "./pages/Profile.tsx";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: "/lineups/add",
     element: <AddLineup />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 ]);
 

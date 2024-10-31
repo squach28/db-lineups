@@ -2,8 +2,17 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
-import { Button, Drawer, List, ListItem, Typography } from "@mui/material";
+import {
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { User } from "firebase/auth";
+import PersonIcon from "@mui/icons-material/Person";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -99,6 +108,14 @@ const DrawerList = ({
           {user ? (
             <Typography variant="subtitle1">{user.email}</Typography>
           ) : null}
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText>
+            <Link to="/profile">Profile</Link>
+          </ListItemText>
         </ListItem>
         <ListItem>
           <Button
