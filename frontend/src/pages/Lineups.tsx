@@ -1,16 +1,44 @@
-import { Box, Grid2, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid2,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Navbar from "../components/Navbar";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const Lineups = () => {
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleCreateNewLineup = () => {
-    navigate("/lineups/add");
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    if (loading) {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleCreateLineup = () => {
+    setLoading(true);
+  };
+
+  const createNewLineup = () => {
+    // TODO: post to axios with lineup name
   };
   return (
     <div>
@@ -44,6 +72,28 @@ const Lineups = () => {
             ) : null}
           </Grid2>
         </Box>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Create Lineup</DialogTitle>
+          <DialogContent>
+            <DialogContentText sx={{ mb: 2 }}>
+              Choose a cool name for this lineup 😎
+            </DialogContentText>
+            <TextField required fullWidth name="name" label="Name" />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} variant="outlined" color="error">
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={handleCreateLineup}
+            >
+              Create
+            </Button>
+          </DialogActions>
+        </Dialog>
       </main>
     </div>
   );
