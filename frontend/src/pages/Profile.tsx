@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import {
   Box,
@@ -10,9 +10,30 @@ import {
   Typography,
 } from "@mui/material";
 import Navbar from "../components/Navbar";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { AdminRequest } from "../types/AdminRequest";
 
 const Profile = () => {
   const authContext = useContext(AuthContext);
+  const [adminRequests, setAdminRequests] = useState<Array<AdminRequest>>([]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (authContext.user === null) {
+      navigate("/", { replace: true });
+    } else {
+      fetchAdminRequests(authContext.user.uid).then((res) => {
+        const requests = res.data.requests;
+        setAdminRequests(requests);
+      });
+    }
+  }, []);
+
+  const fetchAdminRequests = (uid: string) => {
+    return axios.get(
+      `${import.meta.env.VITE_API_URL}/admin/request?uid=${uid}`
+    );
+  };
 
   return (
     <Box>
@@ -56,10 +77,20 @@ const Profile = () => {
                     sx={{ marginX: "auto" }}
                     variant="contained"
                     color="secondary"
+                    disabled={adminRequests.length > 0}
                   >
                     Request Admin
                   </Button>
                 </ListItem>
+              ) : null}
+              {adminRequests.length > 0 ? (
+                <Box sx={{ ml: "auto", textAlign: "end" }}>
+                  <Typography>Admin request still pending</Typography>
+                  <Typography>
+                    Request created:{" "}
+                    {new Date(adminRequests[0].created_at).toLocaleDateString()}
+                  </Typography>
+                </Box>
               ) : null}
               {authContext.admin ? (
                 <Box>
