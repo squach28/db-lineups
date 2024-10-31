@@ -16,15 +16,15 @@ import { AdminRequest } from "../types/AdminRequest";
 
 const Profile = () => {
   const authContext = useContext(AuthContext);
-  const [adminRequests, setAdminRequests] = useState<Array<AdminRequest>>([]);
+  const [adminRequest, setAdminRequest] = useState<AdminRequest | null>(null);
   const navigate = useNavigate();
   useEffect(() => {
     if (authContext.user === null) {
       navigate("/", { replace: true });
     } else {
       fetchAdminRequests(authContext.user.uid).then((res) => {
-        const requests = res.data.requests;
-        setAdminRequests(requests);
+        const request = res.data.request;
+        setAdminRequest(request);
       });
     }
   }, []);
@@ -77,18 +77,18 @@ const Profile = () => {
                     sx={{ marginX: "auto" }}
                     variant="contained"
                     color="secondary"
-                    disabled={adminRequests.length > 0}
+                    disabled={adminRequest !== null}
                   >
                     Request Admin
                   </Button>
                 </ListItem>
               ) : null}
-              {adminRequests.length > 0 ? (
+              {adminRequest ? (
                 <Box sx={{ ml: "auto", textAlign: "end" }}>
-                  <Typography>Admin request still pending</Typography>
+                  <Typography>Status: {adminRequest.status}</Typography>
                   <Typography>
                     Request created:{" "}
-                    {new Date(adminRequests[0].created_at).toLocaleDateString()}
+                    {new Date(adminRequest.created_at).toLocaleDateString()}
                   </Typography>
                 </Box>
               ) : null}
