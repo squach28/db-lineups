@@ -17,6 +17,7 @@ const Profile = () => {
   const authContext = useContext(AuthContext);
   const [adminRequest, setAdminRequest] = useState<AdminRequest | null>(null);
   const [loading, setLoading] = useState(false);
+  const [adminRequests, setAdminRequests] = useState<Array<AdminRequest>>([]);
   useEffect(() => {
     if (authContext.user) {
       setLoading(true);
@@ -29,6 +30,10 @@ const Profile = () => {
           setLoading(false);
         });
     }
+
+    if (authContext.admin) {
+      fetchAdminRequests().then((res) => setAdminRequests(res.data.requests));
+    }
   }, []);
 
   const fetchAdminRequest = (uid: string) => {
@@ -36,7 +41,11 @@ const Profile = () => {
       `${import.meta.env.VITE_API_URL}/admin/request?uid=${uid}`
     );
   };
-  console.log(authContext);
+
+  const fetchAdminRequests = () => {
+    return axios.get(`${import.meta.env.VITE_API_URL}/admin/requests`);
+  };
+
   const createAdminRequest = () => {
     if (authContext.user) {
       return axios.post(`${import.meta.env.VITE_API_URL}/admin/request`, {
@@ -123,6 +132,12 @@ const Profile = () => {
               {authContext.admin ? (
                 <Box>
                   <Typography variant="h4">Admin</Typography>
+                  <Typography variant="h5">Requests</Typography>
+                  <List>
+                    {adminRequests.map((request) => (
+                      <ListItem key={request.id}>{request.uid}</ListItem>
+                    ))}
+                  </List>
                 </Box>
               ) : null}
             </List>

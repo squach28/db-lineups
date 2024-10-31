@@ -41,6 +41,17 @@ export const getAdminRequest = async (req: Request, res: Response) => {
   }
 };
 
+export const getAdminRequests = async (req: Request, res: Response) => {
+  try {
+    const result = await db.query(queries.getAdminRequests);
+
+    res.status(200).json({ requests: result.rows });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Something went wrong, try again later." });
+  }
+};
+
 export const completeAdminRequest = async (req: Request, res: Response) => {
   const APPROVED_STATUS = "APPROVED";
   const REJECTED_STATUS = "REJECTED";
