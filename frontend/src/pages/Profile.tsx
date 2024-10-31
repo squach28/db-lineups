@@ -1,17 +1,25 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import {
+  Avatar,
   Box,
   Button,
   Container,
   Divider,
   List,
   ListItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Typography,
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import { AdminRequest } from "../types/AdminRequest";
+import ClearIcon from "@mui/icons-material/Clear";
+import CheckIcon from "@mui/icons-material/Check";
 
 const Profile = () => {
   const authContext = useContext(AuthContext);
@@ -30,10 +38,7 @@ const Profile = () => {
           setLoading(false);
         });
     }
-
-    if (authContext.admin) {
-      fetchAdminRequests().then((res) => setAdminRequests(res.data.requests));
-    }
+    fetchAdminRequests().then((res) => setAdminRequests(res.data.requests));
   }, []);
 
   const fetchAdminRequest = (uid: string) => {
@@ -72,6 +77,42 @@ const Profile = () => {
       });
   };
 
+  const renderStatus = (id: string, status: string) => {
+    switch (status) {
+      case "PENDING":
+        return (
+          <Box
+            sx={{
+              display: { xs: "flex", md: "block" },
+              justifyContent: { xs: "end" },
+              alignItems: { xs: "end" },
+              gap: { xs: 2 },
+              flexDirection: { sm: "column-reverse" },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              size="small"
+              sx={{
+                mr: 1,
+              }}
+            >
+              Reject
+            </Button>
+            <Button variant="contained" color="success" size="small">
+              Approve
+            </Button>
+          </Box>
+        );
+      case "APPROVED":
+        return <Typography>Approved</Typography>;
+      case "REJECTED":
+        return <Typography>Rejected</Typography>;
+      default:
+        return null;
+    }
+  };
   return (
     <Box>
       <Navbar />
@@ -134,11 +175,24 @@ const Profile = () => {
                 <Box>
                   <Typography variant="h4">Admin</Typography>
                   <Typography variant="h5">Requests</Typography>
-                  <List>
-                    {adminRequests.map((request) => (
-                      <ListItem key={request.id}>{request.uid}</ListItem>
-                    ))}
-                  </List>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Email</TableCell>
+                        <TableCell align="right">Status</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {adminRequests.map((request) => (
+                        <TableRow key={request.id}>
+                          <TableCell>{request.email}</TableCell>
+                          <TableCell align="right">
+                            {renderStatus(request.id, request.status)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </Box>
               ) : null}
             </List>
