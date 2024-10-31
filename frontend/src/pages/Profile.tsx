@@ -11,28 +11,55 @@ import {
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { AdminRequest } from "../types/AdminRequest";
 
 const Profile = () => {
   const authContext = useContext(AuthContext);
   const [adminRequest, setAdminRequest] = useState<AdminRequest | null>(null);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (authContext.user === null) {
-      navigate("/", { replace: true });
-    } else {
-      fetchAdminRequests(authContext.user.uid).then((res) => {
-        const request = res.data.request;
-        setAdminRequest(request);
-      });
+    if (authContext.user) {
+      setLoading(true);
+      fetchAdminRequest(authContext.user.uid)
+        .then((res) => {
+          const request = res.data.request;
+          setAdminRequest(request);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, []);
 
-  const fetchAdminRequests = (uid: string) => {
+  const fetchAdminRequest = (uid: string) => {
     return axios.get(
       `${import.meta.env.VITE_API_URL}/admin/request?uid=${uid}`
     );
+  };
+  console.log(authContext);
+  const createAdminRequest = () => {
+    if (authContext.user) {
+      return axios.post(`${import.meta.env.VITE_API_URL}/admin/request`, {
+        uid: authContext.user.uid,
+      });
+    }
+    return new Promise(() => null);
+  };
+
+  const handleRequestAdmin = () => {
+    setLoading(true);
+    createAdminRequest()
+      .then((res) => {
+        if (res && authContext.user) {
+          fetchAdminRequest(authContext.user.uid).then((res) => {
+            const request = res.data.request;
+            setAdminRequest(request);
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -77,7 +104,8 @@ const Profile = () => {
                     sx={{ marginX: "auto" }}
                     variant="contained"
                     color="secondary"
-                    disabled={adminRequest !== null}
+                    disabled={adminRequest !== null || loading}
+                    onClick={handleRequestAdmin}
                   >
                     Request Admin
                   </Button>

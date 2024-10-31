@@ -7,6 +7,8 @@ export const queries = {
   createAdminRequest:
     "INSERT INTO admin_requests (uid, status, last_updated) VALUES ($1, $2, $3) RETURNING id",
   getAdminRequestByUid: "SELECT * FROM admin_requests WHERE uid = $1",
+  updateAdminRequestById:
+    "UPDATE admin_requests SET status = $1, last_updated = $2 WHERE id = $3 RETURNING id, uid, status",
 };
 
 export const commitTransaction = async (

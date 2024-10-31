@@ -23,27 +23,6 @@ const Navbar = () => {
     setOpen((prev) => !prev);
   };
 
-  const renderPaddlersTab = () => {
-    if (authContext.user) {
-      authContext.user
-        .getIdTokenResult()
-        .then((tokenResult) => {
-          if (tokenResult.claims.admin) {
-            return (
-              <Link className="hover:cursor-pointer" to="/paddlers">
-                Lineups
-              </Link>
-            );
-          } else {
-            return null;
-          }
-        })
-        .catch(() => null);
-    } else {
-      return null;
-    }
-  };
-
   return (
     <nav className="w-full bg-gray-200 text-black text-lg p-2">
       <ul className="flex gap-3">
@@ -52,7 +31,13 @@ const Navbar = () => {
             Home
           </Link>
         </li>
-        <li>{renderPaddlersTab()}</li>
+        <li>
+          {authContext.admin ? (
+            <Link className="hover:cursor-pointer" to="/paddlers">
+              Paddlers
+            </Link>
+          ) : null}
+        </li>
         <li>
           <Link className="hover:cursor-pointer" to="/lineups">
             Lineups

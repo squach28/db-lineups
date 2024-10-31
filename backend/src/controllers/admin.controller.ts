@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { commitTransaction, queries } from "../utils/queries";
 import { db } from "../utils/db";
+import { auth } from "firebase-admin";
 
 export const createAdminRequest = async (req: Request, res: Response) => {
   try {
@@ -38,4 +39,38 @@ export const getAdminRequest = async (req: Request, res: Response) => {
     console.log(e);
     res.status(500).json({ message: "Something went wrong, try again later." });
   }
+};
+
+export const completeAdminRequest = async (req: Request, res: Response) => {
+  const APPROVED_STATUS = "APPROVED";
+  const REJECTED_STATUS = "REJECTED";
+  try {
+    const { id, uid, approve } = req.body;
+    if (id === undefined || uid === undefined || approve === undefined) {
+      res
+        .status(404)
+        .json({ message: "Invalid data: missing id, uid, or approve in body" });
+      return;
+    }
+    const approveStatus = approve ? APPROVED_STATUS : REJECTED_STATUS;
+    commitTransaction(queries.updateAdminRequestById, [
+      approveStatus,
+      new Date(),
+      id,
+    ]).then((result) => {
+      console.log(result);
+      grantAdmin(uid);
+    });
+
+    res.status(201).json({ message: "complete" });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Something went wrong, try again later." });
+  }
+};
+
+export const grantAdmin = async (uid: string) => {
+  await auth().setCustomUserClaims(uid, {
+    admin: true,
+  });
 };
