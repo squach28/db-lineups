@@ -50,6 +50,7 @@ const Profile = () => {
     if (authContext.user) {
       return axios.post(`${import.meta.env.VITE_API_URL}/admin/request`, {
         uid: authContext.user.uid,
+        email: authContext.user.email,
       });
     }
     return new Promise(() => null);

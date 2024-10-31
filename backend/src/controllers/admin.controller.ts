@@ -5,14 +5,15 @@ import { auth } from "firebase-admin";
 
 export const createAdminRequest = async (req: Request, res: Response) => {
   try {
-    const { uid } = req.body;
-    if (uid === undefined) {
-      res.status(404).json({ message: "Missing uid" });
+    const { uid, email } = req.body;
+    if (uid === undefined || email === undefined) {
+      res.status(404).json({ message: "Missing uid or email" });
       return;
     }
     const INITIAL_REQUEST_STATUS = "PENDING";
     const result = await commitTransaction(queries.createAdminRequest, [
       uid,
+      email,
       INITIAL_REQUEST_STATUS,
       new Date(),
     ]);
