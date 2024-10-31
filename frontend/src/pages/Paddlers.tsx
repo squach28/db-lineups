@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { Paddler } from "../types/Paddler";
 import {
@@ -34,10 +34,9 @@ const Paddlers = () => {
     "Steer?",
     "Drum?",
   ];
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [open, setOpen] = useState(searchParams.get("add") ? true : false);
   const authContext = useContext(AuthContext);
-  const navigate = useNavigate();
   const [admin, setAdmin] = useState(false);
   useEffect(() => {
     isAdmin().then((res) => {
