@@ -11,6 +11,9 @@ export const queries = {
     "SELECT * FROM admin_requests ORDER BY CASE WHEN status = 'PENDING' THEN 1 WHEN status = 'APPROVED' THEN 2 ELSE 3 END",
   updateAdminRequestById:
     "UPDATE admin_requests SET status = $1, last_updated = $2 WHERE id = $3 RETURNING id, uid, status",
+  getLineups: "SELECT * FROM lineups",
+  getLineupById: "SELECT * FROM lineups WHERE id = $1",
+  createLineup: "INSERT INTO lineups (name) VALUES ($1) RETURNING id, name",
 };
 
 export const commitTransaction = async (
