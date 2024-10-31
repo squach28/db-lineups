@@ -4,6 +4,10 @@ import { commitTransaction, queries } from "../utils/queries";
 export const createAdminRequest = async (req: Request, res: Response) => {
   try {
     const { uid } = req.body;
+    if (uid === undefined) {
+      res.status(404).json({ message: "Missing uid" });
+      return;
+    }
     const INITIAL_REQUEST_STATUS = "PENDING";
     const result = await commitTransaction(queries.createAdminRequest, [
       uid,
