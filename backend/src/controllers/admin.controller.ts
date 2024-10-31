@@ -31,8 +31,8 @@ export const getAdminRequest = async (req: Request, res: Response) => {
       return;
     }
     const result = await db.query(queries.getAdminRequestByUid, [uid]);
-    const requests = result.rows;
-    res.status(200).json({ requests });
+    const request = result.rowCount ? result.rows[0] : null;
+    res.status(200).json({ request });
     return;
   } catch (e) {
     console.log(e);
