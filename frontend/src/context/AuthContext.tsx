@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }: Props) => {
         setUser(user);
       } else {
         setUser(null);
+        setAdmin(false);
       }
       setLoading(false);
     });
@@ -42,7 +43,8 @@ export const AuthProvider = ({ children }: Props) => {
   }, []);
 
   const logOut = () => {
-    signOut(auth);
+    setLoading(true);
+    signOut(auth).then(() => setLoading(false));
   };
 
   return (

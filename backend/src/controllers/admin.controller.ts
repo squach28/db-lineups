@@ -57,11 +57,11 @@ export const completeAdminRequest = async (req: Request, res: Response) => {
   const APPROVED_STATUS = "APPROVED";
   const REJECTED_STATUS = "REJECTED";
   try {
-    const { id, uid, approve } = req.body;
-    if (id === undefined || uid === undefined || approve === undefined) {
+    const { id, approve } = req.body;
+    if (id === undefined || approve === undefined) {
       res
         .status(404)
-        .json({ message: "Invalid data: missing id, uid, or approve in body" });
+        .json({ message: "Invalid data: missing id or approve in body" });
       return;
     }
     const approveStatus = approve ? APPROVED_STATUS : REJECTED_STATUS;
@@ -70,11 +70,18 @@ export const completeAdminRequest = async (req: Request, res: Response) => {
       new Date(),
       id,
     ]).then((result) => {
-      console.log(result);
-      grantAdmin(uid);
+      if (result) {
+        const uid = result.rows[0].uid;
+        if (approve) {
+          grantAdmin(uid);
+        }
+      } else {
+        throw new Error();
+      }
     });
 
-    res.status(201).json({ message: "complete" });
+    res.status(200).json({ id, approve });
+    return;
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Something went wrong, try again later." });

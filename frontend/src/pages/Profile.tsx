@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import {
-  Avatar,
   Box,
   Button,
   Container,
@@ -18,8 +17,6 @@ import {
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import { AdminRequest } from "../types/AdminRequest";
-import ClearIcon from "@mui/icons-material/Clear";
-import CheckIcon from "@mui/icons-material/Check";
 
 const Profile = () => {
   const authContext = useContext(AuthContext);
@@ -78,6 +75,32 @@ const Profile = () => {
   };
 
   const renderStatus = (id: string, status: string) => {
+    const handleReject = () => {
+      axios
+        .post(`${import.meta.env.VITE_API_URL}/admin/request/complete`, {
+          id,
+          approve: false,
+        })
+        .then(() => {
+          fetchAdminRequests().then((res) =>
+            setAdminRequests(res.data.requests)
+          );
+        });
+    };
+
+    const handleApprove = () => {
+      axios
+        .post(`${import.meta.env.VITE_API_URL}/admin/request/complete`, {
+          id,
+          approve: true,
+        })
+        .then(() => {
+          fetchAdminRequests().then((res) =>
+            setAdminRequests(res.data.requests)
+          );
+        });
+    };
+
     switch (status) {
       case "PENDING":
         return (
@@ -97,10 +120,16 @@ const Profile = () => {
               sx={{
                 mr: 1,
               }}
+              onClick={handleReject}
             >
               Reject
             </Button>
-            <Button variant="contained" color="success" size="small">
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              onClick={handleApprove}
+            >
               Approve
             </Button>
           </Box>
@@ -113,6 +142,7 @@ const Profile = () => {
         return null;
     }
   };
+
   return (
     <Box>
       <Navbar />
@@ -171,7 +201,7 @@ const Profile = () => {
                   </Typography>
                 </Box>
               ) : null}
-              {authContext.admin ? (
+              {!authContext.loading && authContext.admin ? (
                 <Box>
                   <Typography variant="h4">Admin</Typography>
                   <Typography variant="h5">Requests</Typography>
