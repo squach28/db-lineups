@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import AddIcon from "@mui/icons-material/Add";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Lineup } from "../types/Lineup";
@@ -51,7 +51,7 @@ const Lineups = () => {
     createNewLineup().then((res) => {
       setLoading(false);
       setOpen(false);
-      navigate(`lineups/${res.data.id}`);
+      navigate(`/lineups/${res.data.id}`);
     });
   };
 
@@ -96,6 +96,8 @@ const Lineups = () => {
                 key={lineup.id}
                 size={{ xs: 12, sm: 12, md: 4 }}
                 sx={{
+                  width: "100%",
+                  height: "100%",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
@@ -111,7 +113,9 @@ const Lineups = () => {
                   },
                 }}
               >
-                {lineup.name}
+                <Link className="block" to={`/lineups/${lineup.id}`}>
+                  {lineup.name}
+                </Link>
               </Grid2>
             ))}
           </Grid2>
