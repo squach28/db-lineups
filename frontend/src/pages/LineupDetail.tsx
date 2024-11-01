@@ -5,9 +5,6 @@ const LineupDetail = () => {
   return (
     <div>
       <Navbar />
-      <Box>
-        <TextField label="Name" name="name" />
-      </Box>
     </div>
   );
 };
