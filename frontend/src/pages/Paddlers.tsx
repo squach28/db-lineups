@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -12,6 +12,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,6 +20,7 @@ import { Gender } from "../types/Gender";
 import { SidePreference } from "../types/SidePreference";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
+import { AuthContext } from "../context/AuthContext";
 
 const Paddlers = () => {
   const [paddlers, setPaddlers] = useState<Array<Paddler>>([]);
@@ -32,9 +34,15 @@ const Paddlers = () => {
     "Steer?",
     "Drum?",
   ];
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [open, setOpen] = useState(searchParams.get("add") ? true : false);
+  const authContext = useContext(AuthContext);
+  const [admin, setAdmin] = useState(false);
   useEffect(() => {
+    isAdmin().then((res) => {
+      setAdmin(res);
+    });
+
     const fetchPaddlers = () => {
       return axios.get(`${import.meta.env.VITE_API_URL}/paddlers`);
     };
@@ -77,6 +85,23 @@ const Paddlers = () => {
     }
   };
 
+  const isAdmin = async () => {
+    if (authContext.user) {
+      return authContext.user
+        .getIdTokenResult()
+        .then((tokenResult) => {
+          if (tokenResult.claims.admin) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+        .catch(() => false);
+    } else {
+      return false;
+    }
+  };
+
   const getGenderIcon = (gender: Gender) => {
     switch (gender) {
       case Gender.MALE:
@@ -113,17 +138,24 @@ const Paddlers = () => {
         <Navbar />
         <div className="flex justify-between items-center px-2 mt-3">
           <h1 className="text-4xl font-bold text-center">Paddlers</h1>
-          <Link
-            className="bg-blue-600 text-white font-bold p-2 rounded-md hover:cursor-pointer"
-            to="/paddlers/add"
-          >
-            Add Paddler
-          </Link>
+          {admin ? (
+            <Link
+              className="bg-blue-600 text-white font-bold p-2 rounded-md hover:cursor-pointer"
+              to="/paddlers/add"
+            >
+              Add Paddler
+            </Link>
+          ) : null}
         </div>
       </header>
       <main>
         {loading ? <CircularProgress sx={{ marginX: "auto" }} /> : null}
-        {paddlers ? (
+        {!admin ? (
+          <Typography sx={{ textAlign: "center", p: 4 }}>
+            Admin privileges are required
+          </Typography>
+        ) : null}
+        {paddlers && admin ? (
           <Table>
             <TableHead>
               <TableRow>

@@ -7,7 +7,12 @@ import Home from "./pages/Home.tsx";
 import Lineups from "./pages/Lineups.tsx";
 import AddPaddler from "./pages/AddPaddler.tsx";
 import ConfirmAddPaddlers from "./pages/ConfirmAddPaddlers.tsx";
-import AddLineup from "./pages/AddLineup.tsx";
+import AddLineup from "./pages/LineupDetail.tsx";
+import Login from "./pages/Login.tsx";
+import Signup from "./pages/Signup.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
+import Profile from "./pages/Profile.tsx";
+import LineupDetail from "./pages/LineupDetail.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +28,14 @@ const router = createBrowserRouter([
     element: <Lineups />,
   },
   {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+  {
     path: "/paddlers/add",
     element: <AddPaddler />,
   },
@@ -31,13 +44,19 @@ const router = createBrowserRouter([
     element: <ConfirmAddPaddlers />,
   },
   {
-    path: "/lineups/add",
-    element: <AddLineup />,
+    path: "/lineups/:id",
+    element: <LineupDetail />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );
