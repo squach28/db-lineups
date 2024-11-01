@@ -1,7 +1,7 @@
 import { Box, TextField } from "@mui/material";
 import Navbar from "../components/Navbar";
 
-const AddLineup = () => {
+const LineupDetail = () => {
   return (
     <div>
       <Navbar />
@@ -12,4 +12,4 @@ const AddLineup = () => {
   );
 };
 
-export default AddLineup;
+export default LineupDetail;

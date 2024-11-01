@@ -51,6 +51,7 @@ const Lineups = () => {
     createNewLineup().then((res) => {
       setLoading(false);
       setOpen(false);
+      navigate(`lineups/${res.data.id}`);
     });
   };
 
