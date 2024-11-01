@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import AddIcon from "@mui/icons-material/Add";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Lineup } from "../types/Lineup";
@@ -58,6 +58,10 @@ const Lineups = () => {
   const createNewLineup = () => {
     return axios.post(`${import.meta.env.VITE_API_URL}/lineups`, { name });
   };
+
+  const navigateToLineupDetail = (id: string) => {
+    navigate(`/lineups/${id}`);
+  };
   return (
     <div>
       <Navbar />
@@ -96,26 +100,28 @@ const Lineups = () => {
                 key={lineup.id}
                 size={{ xs: 12, sm: 12, md: 4 }}
                 sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
                   minHeight: "200px",
-                  justifySelf: "center",
-                  alignSelf: "center",
                   border: "1px solid black",
                   textAlign: "center",
-                  p: 2,
                   borderRadius: "10px",
                   ":hover": {
                     cursor: "pointer",
                   },
                 }}
               >
-                <Link className="block" to={`/lineups/${lineup.id}`}>
-                  {lineup.name}
-                </Link>
+                <Box
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    textAlign: "center",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onClick={() => navigateToLineupDetail(lineup.id)}
+                >
+                  <Typography>{lineup.name}</Typography>
+                </Box>
               </Grid2>
             ))}
           </Grid2>

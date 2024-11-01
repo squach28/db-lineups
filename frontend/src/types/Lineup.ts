@@ -1,4 +1,4 @@
 export type Lineup = {
-  id: number;
+  id: string;
   name: string;
 };
