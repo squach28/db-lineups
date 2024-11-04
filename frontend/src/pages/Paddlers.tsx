@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { Paddler } from "../types/Paddler";
@@ -135,7 +134,6 @@ const Paddlers = () => {
   return (
     <div>
       <header>
-        <Navbar />
         <div className="flex justify-between items-center px-2 mt-3">
           <h1 className="text-4xl font-bold text-center">Paddlers</h1>
           {admin ? (

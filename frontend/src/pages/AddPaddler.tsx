@@ -18,7 +18,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Navbar from "../components/Navbar";
 import React, { useState } from "react";
 import { PaddlerInfo } from "../types/PaddlerInfo";
 import { SidePreference } from "../types/SidePreference";
@@ -176,9 +175,6 @@ const AddPaddler = () => {
 
   return (
     <div>
-      <header>
-        <Navbar />
-      </header>
       <main>
         <Box
           sx={{

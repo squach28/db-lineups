@@ -13,44 +13,79 @@ import Signup from "./pages/Signup.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import Profile from "./pages/Profile.tsx";
 import LineupDetail from "./pages/LineupDetail.tsx";
+import App from "./App.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <App />,
+    children: [
+      {
+        path: "/paddlers",
+        element: <Paddlers />,
+      },
+      {
+        path: "/paddlers/add",
+        element: <AddPaddler />,
+      },
+      {
+        path: "/paddlers/add/confirm",
+        element: <ConfirmAddPaddlers />,
+      },
+      {
+        path: "/lineups",
+        element: <Lineups />,
+      },
+      {
+        path: "/lineups/:id",
+        element: <LineupDetail />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/signup",
+        element: <Signup />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
+      },
+    ],
   },
-  {
-    path: "/paddlers",
-    element: <Paddlers />,
-  },
-  {
-    path: "/lineups",
-    element: <Lineups />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    path: "/paddlers/add",
-    element: <AddPaddler />,
-  },
-  {
-    path: "/paddlers/add/confirm",
-    element: <ConfirmAddPaddlers />,
-  },
-  {
-    path: "/lineups/:id",
-    element: <LineupDetail />,
-  },
-  {
-    path: "/profile",
-    element: <Profile />,
-  },
+  // {
+  //   path: "/paddlers",
+  //   element: <Paddlers />,
+  // },
+  // {
+  //   path: "/lineups",
+  //   element: <Lineups />,
+  // },
+  // {
+  //   path: "/login",
+  //   element: <Login />,
+  // },
+  // {
+  //   path: "/signup",
+  //   element: <Signup />,
+  // },
+  // {
+  //   path: "/paddlers/add",
+  //   element: <AddPaddler />,
+  // },
+  // {
+  //   path: "/paddlers/add/confirm",
+  //   element: <ConfirmAddPaddlers />,
+  // },
+  // {
+  //   path: "/lineups/:id",
+  //   element: <LineupDetail />,
+  // },
+  // {
+  //   path: "/profile",
+  //   element: <Profile />,
+  // },
 ]);
 
 createRoot(document.getElementById("root")!).render(

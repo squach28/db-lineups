@@ -10,7 +10,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Navbar from "../components/Navbar";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
@@ -64,7 +63,6 @@ const Lineups = () => {
   };
   return (
     <div>
-      <Navbar />
       <main>
         <Box sx={{ p: 2 }}>
           <Typography variant="h3">Lineups</Typography>
