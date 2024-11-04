@@ -10,6 +10,21 @@ interface BoatProps {
 const Boat = (boatProps: BoatProps) => {
   const [lefts, setLefts] = useState(boatProps.lefts);
   const [rights, setRights] = useState(boatProps.rights);
+
+  const leftWeight = lefts.reduce((weight, paddler) => {
+    if (paddler === null) {
+      return weight;
+    }
+    console.log(paddler.weight);
+    return weight + paddler.weight;
+  }, 0);
+  const rightWeight = rights.reduce((weight, paddler) => {
+    if (paddler === null) {
+      return weight;
+    }
+    return weight + paddler.weight;
+  }, 0);
+
   const handleRowDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
@@ -45,7 +60,7 @@ const Boat = (boatProps: BoatProps) => {
         }
         return paddler;
       });
-      setLefts(newRights);
+      setRights(newRights);
     }
   };
 
@@ -96,6 +111,8 @@ const Boat = (boatProps: BoatProps) => {
       <div className="row-start-12 col-start-1 col-span-3 text-center">
         Steers
       </div>
+      <div className="col-start-1">{leftWeight}</div>
+      <div className="col-start-3">{rightWeight}</div>
     </div>
   );
 };
