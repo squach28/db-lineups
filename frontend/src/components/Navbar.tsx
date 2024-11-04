@@ -94,7 +94,7 @@ const DrawerList = ({
             <Typography variant="subtitle1">{user.email}</Typography>
           ) : null}
         </ListItem>
-        <ListItem>
+        <ListItem onClick={toggleOpen}>
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>

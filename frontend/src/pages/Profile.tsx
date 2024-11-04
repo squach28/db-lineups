@@ -145,7 +145,6 @@ const Profile = () => {
 
   return (
     <Box>
-      <Navbar />
       <Container>
         {authContext.user ? (
           <Box sx={{ mt: 4 }}>

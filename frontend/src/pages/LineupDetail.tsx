@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import { Box, List, ListItem, Typography } from "@mui/material";
 import Boat from "../components/Boat";
 import { useEffect, useState } from "react";
@@ -50,7 +49,6 @@ const LineupDetail = () => {
 
   return (
     <div>
-      <Navbar />
       <Box
         sx={{
           display: "flex",
