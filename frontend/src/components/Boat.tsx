@@ -15,7 +15,6 @@ const Boat = (boatProps: BoatProps) => {
     if (paddler === null) {
       return weight;
     }
-    console.log(paddler.weight);
     return weight + paddler.weight;
   }, 0);
   const rightWeight = rights.reduce((weight, paddler) => {
@@ -38,6 +37,7 @@ const Boat = (boatProps: BoatProps) => {
     for (const [_, value] of e.currentTarget.classList.entries()) {
       if (value.includes("row-start")) {
         rowNum = parseInt(value.split("-")[2]) - 2;
+        console.log("row", rowNum);
       }
 
       if (value.includes("col-start")) {
@@ -54,7 +54,7 @@ const Boat = (boatProps: BoatProps) => {
       });
       setLefts(newLefts);
     } else {
-      const newRights = lefts.map((paddler, index) => {
+      const newRights = rights.map((paddler, index) => {
         if (index === rowNum) {
           return newPaddler;
         }
@@ -63,7 +63,6 @@ const Boat = (boatProps: BoatProps) => {
       setRights(newRights);
     }
   };
-
   return (
     <div className="bg-red-500 p-4 grid grid-cols-3 gap-2 grid-rows-12 justify-items-center justify-center min-w-36 min-h-96 rounded-2xl">
       <div className="row-start-1 col-start-1 col-span-3 text-center">
@@ -100,12 +99,17 @@ const Boat = (boatProps: BoatProps) => {
         return row ? (
           <div
             key={`${row} ${index}`}
-            className={`col-start-1 row-start-${index + 2}`}
+            className={`col-start-3 row-start-${index + 2}`}
           >
             <p className="row-start-1">{row.fullName}</p>
           </div>
         ) : (
-          <div key={`${index}`} className="min-w-20 border p-2"></div>
+          <div
+            key={`${index}`}
+            className={`min-w-20 border p-2 col-start-3 row-start-${index + 2}`}
+            onDragOver={handleRowDragOver}
+            onDrop={handleDrop}
+          ></div>
         );
       })}
       <div className="row-start-12 col-start-1 col-span-3 text-center">
