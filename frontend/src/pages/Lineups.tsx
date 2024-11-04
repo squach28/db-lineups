@@ -51,12 +51,16 @@ const Lineups = () => {
     createNewLineup().then((res) => {
       setLoading(false);
       setOpen(false);
-      navigate(`lineups/${res.data.id}`);
+      navigate(`/lineups/${res.data.id}`);
     });
   };
 
   const createNewLineup = () => {
     return axios.post(`${import.meta.env.VITE_API_URL}/lineups`, { name });
+  };
+
+  const navigateToLineupDetail = (id: string) => {
+    navigate(`/lineups/${id}`);
   };
   return (
     <div>
@@ -96,22 +100,28 @@ const Lineups = () => {
                 key={lineup.id}
                 size={{ xs: 12, sm: 12, md: 4 }}
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
                   minHeight: "200px",
-                  justifySelf: "center",
-                  alignSelf: "center",
                   border: "1px solid black",
                   textAlign: "center",
-                  p: 2,
                   borderRadius: "10px",
                   ":hover": {
                     cursor: "pointer",
                   },
                 }}
               >
-                {lineup.name}
+                <Box
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    textAlign: "center",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onClick={() => navigateToLineupDetail(lineup.id)}
+                >
+                  <Typography>{lineup.name}</Typography>
+                </Box>
               </Grid2>
             ))}
           </Grid2>

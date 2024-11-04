@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { commitTransaction, queries } from "../utils/queries";
 import { db } from "../utils/db";
+import { firestore } from "../utils/firebase";
 
 export const getAllLineups = async (req: Request, res: Response) => {
   try {
@@ -40,11 +41,25 @@ export const createLineup = async (req: Request, res: Response) => {
       return;
     } else {
       const { id, name } = result.rows[0];
-      res.status(201).json({ id, name });
-      return;
+      addLineup(id, name).then(() => {
+        res.status(201).json({ id, name });
+        return;
+      });
     }
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Something went wrong, try again later." });
   }
+};
+
+const addLineup = async (id: string, name: string) => {
+  const lineup = {
+    name,
+    lefts: [null, null, null, null, null, null, null, null, null, null],
+    rights: [null, null, null, null, null, null, null, null, null, null],
+    drummer: null,
+    steers: null,
+  };
+  const doc = firestore.collection("lineups").doc(id);
+  await doc.set(lineup);
 };

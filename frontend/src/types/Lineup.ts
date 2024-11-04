@@ -1,4 +1,8 @@
+import { Paddler } from "./Paddler";
+
 export type Lineup = {
-  id: number;
+  id: string;
   name: string;
+  lefts: Array<Paddler | null>;
+  rights: Array<Paddler | null>;
 };
