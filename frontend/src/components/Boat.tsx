@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Paddler } from "../types/Paddler";
 
 interface BoatProps {
@@ -8,6 +8,8 @@ interface BoatProps {
 }
 
 const Boat = (boatProps: BoatProps) => {
+  const [lefts, setLefts] = useState(boatProps.lefts);
+  const [rights, setRights] = useState(boatProps.rights);
   const handleRowDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
@@ -15,7 +17,36 @@ const Boat = (boatProps: BoatProps) => {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const data = e.dataTransfer.getData("message");
-    e.currentTarget.textContent = data;
+    const newPaddler = JSON.parse(data);
+    let isLeft = false;
+    let rowNum = 0;
+    for (const [_, value] of e.currentTarget.classList.entries()) {
+      if (value.includes("row-start")) {
+        rowNum = parseInt(value.split("-")[2]) - 2;
+      }
+
+      if (value.includes("col-start")) {
+        const col = parseInt(value.split("-")[2]);
+        isLeft = col === 1 ? true : false;
+      }
+    }
+    if (isLeft) {
+      const newLefts = lefts.map((paddler, index) => {
+        if (index === rowNum) {
+          return newPaddler;
+        }
+        return paddler;
+      });
+      setLefts(newLefts);
+    } else {
+      const newRights = lefts.map((paddler, index) => {
+        if (index === rowNum) {
+          return newPaddler;
+        }
+        return paddler;
+      });
+      setLefts(newRights);
+    }
   };
 
   return (
@@ -23,7 +54,7 @@ const Boat = (boatProps: BoatProps) => {
       <div className="row-start-1 col-start-1 col-span-3 text-center">
         Drummer
       </div>
-      {boatProps.lefts.map((row, index) => {
+      {lefts.map((row, index) => {
         return row ? (
           <div
             key={`${row} ${index}`}
@@ -34,7 +65,7 @@ const Boat = (boatProps: BoatProps) => {
         ) : (
           <div
             key={`${index}`}
-            className="min-w-20 border p-2"
+            className={`min-w-20 border p-2 col-start-1 row-start-${index + 2}`}
             onDragOver={handleRowDragOver}
             onDrop={handleDrop}
           ></div>
@@ -50,7 +81,7 @@ const Boat = (boatProps: BoatProps) => {
       <div className="row-start-9 col-start-2">8</div>
       <div className="row-start-10 col-start-2">9</div>
       <div className="row-start-11 col-start-2">10</div>
-      {boatProps.rights.map((row, index) => {
+      {rights.map((row, index) => {
         return row ? (
           <div
             key={`${row} ${index}`}

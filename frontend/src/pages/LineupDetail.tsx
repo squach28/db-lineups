@@ -44,7 +44,14 @@ const LineupDetail = () => {
   };
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    e.dataTransfer.setData("message", e.currentTarget.id);
+    console.log(e.currentTarget.id);
+    console.log(paddlers);
+    const paddler = paddlers.find(
+      (paddler) => parseInt(paddler.id) === parseInt(e.currentTarget.id)
+    );
+
+    console.log(paddler);
+    e.dataTransfer.setData("message", JSON.stringify(paddler));
   };
 
   return (
