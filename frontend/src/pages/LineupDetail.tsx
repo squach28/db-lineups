@@ -55,49 +55,59 @@ const LineupDetail = () => {
   };
 
   return (
-    <div>
+    <Box
+      sx={{
+        display: "flex",
+        flex: 1,
+        width: "100%",
+      }}
+    >
+      <List>
+        {lineup ? (
+          <ListItem sx={{ fontWeight: "bold" }}>{lineup.name}</ListItem>
+        ) : null}
+        {paddlers.map((paddler) => (
+          <ListItem key={paddler.id}>
+            <Box
+              id={paddler.id}
+              sx={{
+                display: "flex",
+                gap: 2,
+                border: "1px solid black",
+                p: 2,
+                flex: 1,
+                ":hover": "pointer",
+              }}
+              draggable={true}
+              onDragStart={(e: React.DragEvent<HTMLDivElement>) => {
+                handleDragStart(e);
+              }}
+            >
+              <Typography>{paddler.fullName}</Typography>
+              {renderGenderIcon(paddler.gender)}
+            </Box>
+          </ListItem>
+        ))}
+      </List>
       <Box
         sx={{
           display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
         }}
       >
-        <List>
-          {paddlers.map((paddler) => (
-            <ListItem key={paddler.id}>
-              <Box
-                id={paddler.id}
-                sx={{
-                  display: "flex",
-                  gap: 2,
-                  border: "1px solid black",
-                  p: 2,
-                  ":hover": "pointer",
-                }}
-                draggable={true}
-                onDragStart={(e: React.DragEvent<HTMLDivElement>) => {
-                  handleDragStart(e);
-                }}
-              >
-                <Typography>{paddler.fullName}</Typography>
-                {renderGenderIcon(paddler.gender)}
-              </Box>
-            </ListItem>
-          ))}
-        </List>
-        <Box>
-          {lineup ? (
-            <Box>
-              <Typography>{lineup.name}</Typography>
-              <Boat
-                name={lineup.name}
-                lefts={lineup.lefts}
-                rights={lineup.rights}
-              />
-            </Box>
-          ) : null}
-        </Box>
+        {lineup ? (
+          <Box>
+            <Boat
+              name={lineup.name}
+              lefts={lineup.lefts}
+              rights={lineup.rights}
+            />
+          </Box>
+        ) : null}
       </Box>
-    </div>
+    </Box>
   );
 };
 

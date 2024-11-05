@@ -26,6 +26,7 @@ const Boat = (boatProps: BoatProps) => {
 
   const handleRowDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    e.currentTarget.classList.add("border");
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -37,7 +38,6 @@ const Boat = (boatProps: BoatProps) => {
     for (const [_, value] of e.currentTarget.classList.entries()) {
       if (value.includes("row-start")) {
         rowNum = parseInt(value.split("-")[2]) - 2;
-        console.log("row", rowNum);
       }
 
       if (value.includes("col-start")) {
@@ -64,7 +64,7 @@ const Boat = (boatProps: BoatProps) => {
     }
   };
   return (
-    <div className="bg-red-500 p-4 grid grid-cols-3 gap-2 grid-rows-12 justify-items-center justify-center min-w-36 min-h-96 rounded-2xl">
+    <div className="border border-black p-6 grid grid-cols-3 gap-2 grid-rows-12 justify-items-center justify-center min-w-36 min-h-96 rounded-2xl">
       <div className="row-start-1 col-start-1 col-span-3 text-center">
         Drummer
       </div>
@@ -79,7 +79,9 @@ const Boat = (boatProps: BoatProps) => {
         ) : (
           <div
             key={`${index}`}
-            className={`min-w-20 border p-2 col-start-1 row-start-${index + 2}`}
+            className={`min-w-20 border border-black p-2 col-start-1 row-start-${
+              index + 2
+            }`}
             onDragOver={handleRowDragOver}
             onDrop={handleDrop}
           ></div>
@@ -106,7 +108,9 @@ const Boat = (boatProps: BoatProps) => {
         ) : (
           <div
             key={`${index}`}
-            className={`min-w-20 border p-2 col-start-3 row-start-${index + 2}`}
+            className={`min-w-20 border border-black p-2 col-start-3 row-start-${
+              index + 2
+            }`}
             onDragOver={handleRowDragOver}
             onDrop={handleDrop}
           ></div>
