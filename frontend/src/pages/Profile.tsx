@@ -14,7 +14,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import Navbar from "../components/Navbar";
 import axios from "axios";
 import { AdminRequest } from "../types/AdminRequest";
 
